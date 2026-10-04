@@ -2,7 +2,7 @@
 import readline from 'node:readline';
 import { runCodeScribe, toolDefinition } from './src/adapter.mjs';
 
-const SERVER_INFO = { name: 'aiws-code-scribe', version: '0.1.0' };
+const SERVER_INFO = { name: 'aiws-code-scribe', version: '0.1.2' };
 const SUPPORTED_PROTOCOLS = new Set(['2024-11-05', '2025-03-26', '2025-06-18']);
 
 function send(message) {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 - 2026-10-04
+
+- Synchronized Gemini Extension, package and MCP server version metadata after
+  the v0.1.1 interoperability fix.
+
 ## 0.1.1 - 2026-10-04
 
 - Added Gemini-safe `current_files` input so `/` and `.` in file paths are
