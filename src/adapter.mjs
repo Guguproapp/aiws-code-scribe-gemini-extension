@@ -42,6 +42,33 @@ function serializedSize(value) {
   }
 }
 
+function normalizeCurrentFiles(task) {
+  if (task.current_files === undefined) return { task };
+  if (task.current_code !== undefined) {
+    return { error: blocked('CURRENT_SOURCE_AMBIGUOUS', 'Provide current_files or current_code, not both.') };
+  }
+  if (!Array.isArray(task.current_files) || task.current_files.length === 0) {
+    return { error: blocked('CURRENT_FILES_REQUIRED', 'current_files must contain at least one approved file.') };
+  }
+
+  const currentCode = {};
+  for (const file of task.current_files) {
+    if (!file || typeof file !== 'object' || Array.isArray(file)
+      || typeof file.path !== 'string' || file.path.length === 0
+      || typeof file.content !== 'string') {
+      return { error: blocked('CURRENT_FILE_INVALID', 'Each current_files item requires a non-empty path and string content.') };
+    }
+    if (Object.hasOwn(currentCode, file.path)) {
+      return { error: blocked('CURRENT_FILE_DUPLICATE', `Duplicate current_files path: ${file.path}`) };
+    }
+    currentCode[file.path] = file.content;
+  }
+
+  const normalized = { ...task, current_code: currentCode };
+  delete normalized.current_files;
+  return { task: normalized };
+}
+
 export function validateRequest(input, { coreRoot = coreRootFromEnvironment() } = {}) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) {
     return blocked('INVALID_INPUT', 'Tool arguments must be an object.');
@@ -58,7 +85,9 @@ export function validateRequest(input, { coreRoot = coreRootFromEnvironment() } 
   if (input.task.capability !== undefined && input.task.capability !== 'scribe.generate') {
     return blocked('CAPABILITY_NOT_ALLOWED', 'The Gemini wrapper exposes scribe.generate only.');
   }
-  return { task: input.task, coreRoot };
+  const normalized = normalizeCurrentFiles(input.task);
+  if (normalized.error) return normalized.error;
+  return { task: normalized.task, coreRoot };
 }
 
 export async function runCodeScribe(input, options = {}) {
@@ -101,7 +130,7 @@ export const toolDefinition = {
         description: 'A complete structured Code Scribe task. Do not send an entire repository.',
         required: [
           'task_id', 'objective', 'target_files', 'allow_write', 'deny_write',
-          'current_code', 'expected_change', 'acceptance', 'forbidden_change',
+          'current_files', 'expected_change', 'acceptance', 'forbidden_change',
           'max_files', 'max_lines'
         ],
         properties: {
@@ -111,7 +140,20 @@ export const toolDefinition = {
           target_files: { type: 'array', items: { type: 'string' }, minItems: 1 },
           allow_write: { type: 'array', items: { type: 'string' }, minItems: 1 },
           deny_write: { type: 'array', items: { type: 'string' } },
-          current_code: { type: 'object', description: 'Exact current text keyed by approved target path.' },
+          current_files: {
+            type: 'array',
+            minItems: 1,
+            description: 'Exact current text for each approved target. Preserve path punctuation exactly.',
+            items: {
+              type: 'object',
+              additionalProperties: false,
+              required: ['path', 'content'],
+              properties: {
+                path: { type: 'string', minLength: 1 },
+                content: { type: 'string' }
+              }
+            }
+          },
           expected_change: { type: 'object', description: 'Recipe inputs such as file, selector, property and value, or find and replace.' },
           acceptance: { type: 'array', items: { type: 'string' } },
           forbidden_change: { type: 'array', items: { type: 'string' } },
@@ -121,7 +163,7 @@ export const toolDefinition = {
           framework: { type: 'string' },
           recipe: { type: 'string' }
         },
-        additionalProperties: true
+        additionalProperties: false
       }
     }
   }

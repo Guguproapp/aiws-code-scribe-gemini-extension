@@ -2,7 +2,10 @@
 
 Use `code_scribe_generate_patch` only after the requested change has been
 normalized into a complete structured task with exact target files, current
-code, `allow_write`, `deny_write`, acceptance criteria and size limits.
+code in `current_files: [{ path, content }]`, `allow_write`, `deny_write`,
+acceptance criteria and size limits. Preserve every path exactly; never convert
+slashes or dots to underscores and never send `current_code` to this Gemini
+tool.
 
 The tool is a ZERO_AI deterministic patch generator. It does not inspect a
 repository, apply a patch, change dependencies, or expand scope. Report the

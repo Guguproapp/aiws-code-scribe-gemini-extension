@@ -41,7 +41,7 @@ async function handle(message) {
       jsonrpc: '2.0',
       id,
       result: {
-        isError: result.status !== 'PATCH_READY',
+        isError: result.status === 'ERROR',
         structuredContent: result,
         content: [{ type: 'text', text: JSON.stringify(result) }]
       }

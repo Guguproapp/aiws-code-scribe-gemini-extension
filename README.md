@@ -18,10 +18,11 @@ giving the wrapper access to an entire repository.
 
 No AI provider key is required by Code Scribe Core's ZERO_AI Recipe mode.
 However, the Gemini CLI host still requires its own supported authentication.
-Google stopped serving Gemini CLI requests for individual/free accounts on
-2026-06-18; live natural-language invocation now requires a supported API key
-or enterprise entitlement. Installation and local MCP/Core validation do not
-by themselves prove model access.
+A Gemini API key may use Google's available free tier, subject to Google's
+current regional availability, model support, quotas and rate limits. Paid or
+enterprise access is not required by this Extension. Installation and local
+MCP/Core validation do not by themselves prove that a particular Gemini account
+currently has model quota.
 
 ## Install from a local checkout
 
@@ -46,7 +47,10 @@ successful direct install.
 ## Example request
 
 Ask Gemini to generate a patch from a structured task that contains only the
-approved file text. The tool returns `PATCH_READY`, `NEED_CONTEXT`,
+approved file text. Gemini supplies that text as
+`current_files: [{ "path": "src/example.css", "content": "..." }]` so file
+paths retain their `/` and `.` characters. The adapter converts this list to the
+Core's internal map without changing the Core. The tool returns `PATCH_READY`, `NEED_CONTEXT`,
 `NO_MATCHING_RECIPE`, `SCOPE_BLOCKED`, `VALIDATION_FAILED`, `HUMAN_REQUIRED`, or
 `ERROR`.
 

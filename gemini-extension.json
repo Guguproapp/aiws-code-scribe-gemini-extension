@@ -1,6 +1,6 @@
 {
   "name": "aiws-code-scribe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate a scope-checked patch preview with the existing ZERO_AI AIWS Code Scribe Core.",
   "mcpServers": {
     "aiws-code-scribe": {

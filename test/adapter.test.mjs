@@ -39,6 +39,27 @@ void test('configured Code Scribe Core returns a patch preview without applying 
   assert.match(result.patch, /width: 100%/u);
 });
 
+void test('Gemini current_files preserves punctuated paths for the Core', async () => {
+  const source = task();
+  delete source.current_code;
+  source.current_files = [{ path: 'src/payment.css', content: '.pay-button { width: 240px; }' }];
+  const result = await runCodeScribe({ task: source }, { coreRoot });
+  assert.equal(result.status, 'PATCH_READY');
+  assert.equal(result.applied, false);
+  assert.match(result.patch, /width: 100%/u);
+});
+
+void test('Gemini current_files rejects duplicate or ambiguous sources', () => {
+  const duplicate = task({ current_code: undefined, current_files: [
+    { path: 'src/payment.css', content: 'a' },
+    { path: 'src/payment.css', content: 'b' }
+  ] });
+  assert.equal(validateRequest({ task: duplicate }, { coreRoot }).error_code, 'CURRENT_FILE_DUPLICATE');
+
+  const ambiguous = task({ current_files: [{ path: 'src/payment.css', content: 'a' }] });
+  assert.equal(validateRequest({ task: ambiguous }, { coreRoot }).error_code, 'CURRENT_SOURCE_AMBIGUOUS');
+});
+
 void test('Core scope guard still blocks a path outside allow_write', async () => {
   const result = await runCodeScribe({ task: task({ target_files: ['README.md'] }) }, { coreRoot });
   assert.equal(result.status, 'SCOPE_BLOCKED');
