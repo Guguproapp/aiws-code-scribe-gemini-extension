@@ -1,0 +1,25 @@
+{
+  "name": "aiws-code-scribe",
+  "version": "0.1.0",
+  "description": "Generate a scope-checked patch preview with the existing ZERO_AI AIWS Code Scribe Core.",
+  "mcpServers": {
+    "aiws-code-scribe": {
+      "command": "node",
+      "args": ["${extensionPath}/server.mjs"],
+      "cwd": "${workspacePath}"
+    }
+  },
+  "contextFileName": "GEMINI.md",
+  "excludeTools": [
+    "run_shell_command(git apply)",
+    "run_shell_command(git push)"
+  ],
+  "settings": [
+    {
+      "name": "Code Scribe Core path",
+      "description": "Absolute local path to an existing AIWS Code Scribe checkout. This is a local path only; do not enter credentials or secrets.",
+      "envVar": "AIWS_CODE_SCRIBE_ROOT",
+      "sensitive": false
+    }
+  ]
+}

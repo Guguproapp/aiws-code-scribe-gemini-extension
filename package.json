@@ -1,0 +1,12 @@
+{
+  "name": "aiws-code-scribe-gemini-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Thin Gemini CLI wrapper for a separately installed AIWS Code Scribe Core",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "test": "node --test test/*.test.mjs",
+    "verify:public": "node scripts/verify-public-package.mjs"
+  }
+}
