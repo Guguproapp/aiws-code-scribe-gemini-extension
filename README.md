@@ -30,14 +30,13 @@ Restart Gemini CLI after installing or changing Extension configuration.
 
 ## GitHub direct install
 
-After the public wrapper repository is published:
-
 ```sh
 gemini extensions install https://github.com/Guguproapp/aiws-code-scribe-gemini-extension
 ```
 
-Do not treat this command as proof that the repository or Gallery listing is
-already live. Check the release status in `PUBLICATION_CHECKLIST.md`.
+The public repository and direct-install path are verified. Gallery discovery
+is tracked separately in `PUBLICATION_CHECKLIST.md` and is not implied by a
+successful direct install.
 
 ## Example request
 

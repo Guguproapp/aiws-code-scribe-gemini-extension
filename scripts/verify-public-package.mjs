@@ -3,7 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 
 const root = new URL('../', import.meta.url);
 const allowedTopLevel = new Set([
-  '.gitignore', 'CHANGELOG.md', 'GEMINI.md', 'PUBLICATION_CHECKLIST.md',
+  '.git', '.gitignore', 'CHANGELOG.md', 'GEMINI.md', 'PUBLICATION_CHECKLIST.md',
   'README.md', 'SECURITY.md', 'gemini-extension.json', 'package.json',
   'scripts', 'server.mjs', 'src', 'test'
 ]);
