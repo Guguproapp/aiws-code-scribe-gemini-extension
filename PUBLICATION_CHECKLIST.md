@@ -12,3 +12,6 @@
 Until checked with direct evidence, unchecked items are `NOT RUN`, not PASS.
 
 Public repository: https://github.com/Guguproapp/aiws-code-scribe-gemini-extension
+
+Registry check on 2026-10-04: `PENDING` (not listed yet). The official crawler
+runs after publication; direct GitHub installation is already available.
