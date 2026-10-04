@@ -17,6 +17,11 @@ giving the wrapper access to an entire repository.
 - an AIWS Code Scribe Core checkout
 
 No AI provider key is required by Code Scribe Core's ZERO_AI Recipe mode.
+However, the Gemini CLI host still requires its own supported authentication.
+Google stopped serving Gemini CLI requests for individual/free accounts on
+2026-06-18; live natural-language invocation now requires a supported API key
+or enterprise entitlement. Installation and local MCP/Core validation do not
+by themselves prove model access.
 
 ## Install from a local checkout
 
